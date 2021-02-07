@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { EmailValidator } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -9,11 +10,12 @@ import { EmailValidator } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(public auth: AngularFireAuth) { }
+  constructor(public auth: AngularFireAuth,private router: Router) { }
 
-  email:string;
-  password:string;
-  confirmPassword:string
+  useremail:string;
+  userpassword:string;
+  userconfirmpassword:string;
+
 
   ngOnInit() {
   }
@@ -21,20 +23,23 @@ export class RegisterComponent implements OnInit {
   register()
   {
 
-    if(this.password == this.confirmPassword)
+    if(this.userpassword == this.userconfirmpassword)
     {
+      this.auth.createUserWithEmailAndPassword(this.useremail, this.userpassword)
+      .then((user) => {
+        console.log("i am here");
+        console.log(user.user.uid);
+        this.router.navigate(['/home']);
 
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
+      });
+      }
     }
 
-    this.auth.createUserWithEmailAndPassword(this.email, this.password)
-  .then((user) => {
-    console.log("i am here");
-  })
-  .catch((error) => {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ..
-  });
-  }
+   
 
 }

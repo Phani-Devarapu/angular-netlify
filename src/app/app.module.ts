@@ -10,6 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { HomeComponent } from './home/home.component';
+import { NgxFileDropModule } from 'ngx-file-drop';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 @NgModule({
   declarations: [
@@ -17,6 +21,7 @@ import { environment } from '../environments/environment';
     LoginComponent,
     HeaderComponent,
     RegisterComponent,
+    HomeComponent,
     
   ],
   imports: [
@@ -24,9 +29,11 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    NgxFileDropModule,
+    AngularFireStorageModule
   ],
-  providers: [],
+  providers: [AngularFireAuth],
   bootstrap: [AppComponent,HeaderComponent]
 })
 export class AppModule { }
