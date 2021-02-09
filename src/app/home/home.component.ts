@@ -48,7 +48,7 @@ public getdata(){
           
           ad.items.forEach(itms=>{
             //console.log(itms.name);
-            this.totalItems.push(itms);
+            this.assignValues(itms);
             //console.log(itms.getDownloadURL().then(dUrl=>{console.log(dUrl)}));
           })
         
@@ -58,10 +58,14 @@ public getdata(){
   });
  
   console.log("the full oath")
-  this.totalItems.forEach(ers=>{console.log(ers.)});
+  console.log(this.totalItems.length);
   
  }
-
+public assignValues(str : Reference)
+{
+  this.totalItems.push(str);
+  console.log(str);
+}
 
   public files: NgxFileDropEntry[] = [];
 
