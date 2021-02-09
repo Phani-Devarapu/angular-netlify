@@ -5,6 +5,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from "rxjs/operators";
 import { AngularFireAuth } from '@angular/fire/auth';
 import { not } from '@angular/compiler/src/output/output_ast';
+import { ListResult, Reference } from '@angular/fire/storage/interfaces';
 
 @Component({
   selector: 'app-home',
@@ -17,20 +18,22 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-    this.getdata();
+   this.getdata();
 
   }
 
+
    prefix="";
+   totalItems :Reference[]=[];
    user =this.auth.authState.subscribe(user=>{
     if(user) 
     {
-      console.log(user.uid);
+      //console.log(user.uid);
       this.prefix = user.uid;
     }
   })
 
- getdata();
+ 
 
 public getdata(){
   console.log("the prefix is" + this.prefix);
@@ -41,18 +44,22 @@ public getdata(){
     {
       e.listAll().then(ad=>
         {
-          console.log(ad);
+         // console.log(ad);
+          
           ad.items.forEach(itms=>{
-            console.log(itms.name);
-            console.log(itms.getDownloadURL().then(dUrl=>{console.log(dUrl)}));
+            //console.log(itms.name);
+            this.totalItems.push(itms);
+            //console.log(itms.getDownloadURL().then(dUrl=>{console.log(dUrl)}));
           })
-        
         
         })});
 
 
   });
  
+  console.log("the full oath")
+  this.totalItems.forEach(ers=>{console.log(ers.)});
+  
  }
 
 
