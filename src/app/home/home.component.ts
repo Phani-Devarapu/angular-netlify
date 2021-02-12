@@ -6,6 +6,8 @@ import { finalize } from "rxjs/operators";
 import { AngularFireAuth } from '@angular/fire/auth';
 import { not } from '@angular/compiler/src/output/output_ast';
 import { ListResult, Reference } from '@angular/fire/storage/interfaces';
+import { UserinfoService } from '../services/userinfo.service';
+import { UserfileService } from '../services/userfile.service';
 
 @Component({
   selector: 'app-home',
@@ -14,24 +16,34 @@ import { ListResult, Reference } from '@angular/fire/storage/interfaces';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private storage: AngularFireStorage,public auth: AngularFireAuth) { }
+  constructor(private storage: AngularFireStorage,public auth: AngularFireAuth,private userServ:UserinfoService,private userFileServ:UserfileService) { }
 
   ngOnInit() {
 
    this.getdata();
+   this.assignValuesServ();
+   
 
   }
 
 
    prefix="";
    totalItems :Reference[]=[];
-   user =this.auth.authState.subscribe(user=>{
-    if(user) 
-    {
-      //console.log(user.uid);
-      this.prefix = user.uid;
-    }
-  })
+   totalFIles:string[]=[];
+   
+   public userData()
+   {
+    this.prefix =this.userServ.getUserUid();
+   }
+     
+   
+  //  user =this.auth.authState.subscribe(user=>{
+  //   if(user) 
+  //   {
+  //     //console.log(user.uid);
+  //     this.prefix = user.uid;
+  //   }
+  // })
 
  
 
@@ -44,27 +56,42 @@ public getdata(){
     {
       e.listAll().then(ad=>
         {
-         // console.log(ad);
-          
+         
+         this.userFileServ.setUserFiles(ad.items);
           ad.items.forEach(itms=>{
             //console.log(itms.name);
-            this.assignValues(itms);
+           // this.assignValues(itms);
             //console.log(itms.getDownloadURL().then(dUrl=>{console.log(dUrl)}));
           })
         
         })});
-
+     
+      //  this.assignValuesServ();
 
   });
  
-  console.log("the full oath")
-  console.log(this.totalItems.length);
-  
- }
-public assignValues(str : Reference)
+
+ }  
+
+ 
+ 
+
+// public assignValues()
+// {
+//   // this.totalItems.push(str);
+//   // console.log(str);
+// }
+
+public assignValuesServ()
 {
-  this.totalItems.push(str);
-  console.log(str);
+
+  console.log("call by the maindsded sdh  ")
+  this.totalFIles = this.userFileServ.getUserFiles();
+  console.log(this.totalFIles.length);
+  this.totalFIles.forEach(element => {
+    console.log(element);
+  });
+
 }
 
   public files: NgxFileDropEntry[] = [];
