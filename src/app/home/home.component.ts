@@ -4,6 +4,8 @@ import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from "rxjs/operators";
 import { AngularFireAuth } from '@angular/fire/auth';
+import { not } from '@angular/compiler/src/output/output_ast';
+import { ListResult, Reference } from '@angular/fire/storage/interfaces';
 
 @Component({
   selector: 'app-home',
@@ -16,18 +18,54 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
+   this.getdata();
+
   }
 
+
    prefix="";
+   totalItems :Reference[]=[];
    user =this.auth.authState.subscribe(user=>{
     if(user) 
     {
-      console.log(user.uid);
+      //console.log(user.uid);
       this.prefix = user.uid;
     }
   })
+
  
 
+public getdata(){
+  console.log("the prefix is" + this.prefix);
+  this.storage.ref(this.prefix).listAll().subscribe(data=>{
+   // console.log(data.prefixes.forEach(e=>{e.listAll().then(ad=>{console.log(ad)})}));
+
+   data.prefixes.forEach(e=>
+    {
+      e.listAll().then(ad=>
+        {
+         // console.log(ad);
+          
+          ad.items.forEach(itms=>{
+            //console.log(itms.name);
+            this.assignValues(itms);
+            //console.log(itms.getDownloadURL().then(dUrl=>{console.log(dUrl)}));
+          })
+        
+        })});
+
+
+  });
+ 
+  console.log("the full oath")
+  console.log(this.totalItems.length);
+  
+ }
+public assignValues(str : Reference)
+{
+  this.totalItems.push(str);
+  console.log(str);
+}
 
   public files: NgxFileDropEntry[] = [];
 
@@ -46,6 +84,18 @@ export class HomeComponent implements OnInit {
           var name = file.name;
           const fileRef = this.storage.ref(this.prefix+"/"+name);
         // const fileRef = this.storage.ref();
+        this.storage.ref(this.prefix).listAll().subscribe((res)=>{
+          console.log("i a hrere");
+          console.log(res);
+        })
+
+        this.storage.ref(this.prefix).listAll().subscribe(data=>{
+          data.items.forEach(e=>{
+              e.getDownloadURL().then((url)=>{
+                console.log(url)
+              })
+          })
+        });
 
           this.storage.upload(this.prefix+"/"+name, file).snapshotChanges().pipe(
             finalize(() => {
