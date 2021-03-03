@@ -15,6 +15,7 @@ import { HomeComponent } from './home/home.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +33,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
     AngularFireDatabaseModule,
     NgxFileDropModule,
     AngularFireStorageModule
+    
   ],
   providers: [AngularFireAuth],
   bootstrap: [AppComponent,HeaderComponent]

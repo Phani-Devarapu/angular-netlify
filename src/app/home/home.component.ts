@@ -8,6 +8,7 @@ import { not } from '@angular/compiler/src/output/output_ast';
 import { ListResult, Reference } from '@angular/fire/storage/interfaces';
 import { UserinfoService } from '../services/userinfo.service';
 import { UserfileService } from '../services/userfile.service';
+  
 
 @Component({
   selector: 'app-home',
@@ -22,12 +23,15 @@ export class HomeComponent implements OnInit {
 
    this.getdata();
    this.assignValuesServ();
+
+   
    
 
   }
 
 
    prefix="";
+   dwnUrl="";
    totalItems :Reference[]=[];
    totalFIles:string[]=[];
    
@@ -168,6 +172,24 @@ public assignValuesServ()
 
   public fileLeave(event){
     console.log(event);
+  }
+
+
+  public getfileUrl($event, post)
+  {
+    console.log("clicked" + post);
+    console.log(this.userServ.getUserUid());
+    console.log(this.userServ.getUserUid() +"/"+ post);
+
+    this.storage.ref(this.userServ.getUserUid()+"/"+post).getDownloadURL().subscribe(url=>
+      {
+        this.dwnUrl = url;
+        console.log(this.dwnUrl);
+      
+      });
+ 
+    
+
   }
 
 
